@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//TODO:fix drop down
+//TODO:fix the swap icon
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
 
@@ -10,7 +12,8 @@ class InitialScreen extends StatefulWidget {
 class _InitialScreenState extends State<InitialScreen> {
   @override
   Widget build(BuildContext context) {
-    String _selectedCurrency = 'USD';
+    String selectedCurrencyFrom = 'USD';
+    String selectedCurrencyTo = 'EUR';
     List<String> _currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
     return Stack(
       fit: StackFit.expand,
@@ -56,6 +59,7 @@ class _InitialScreenState extends State<InitialScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Container(
               child: DropdownButtonFormField<String>(
+                menuMaxHeight: 150,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
@@ -63,11 +67,11 @@ class _InitialScreenState extends State<InitialScreen> {
                         borderSide: const BorderSide(
                             color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
-                value: _selectedCurrency,
+                value: selectedCurrencyFrom,
                 icon: Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
-                    _selectedCurrency = newValue!;
+                    selectedCurrencyFrom = newValue!;
                   });
                 },
                 items:
@@ -87,11 +91,20 @@ class _InitialScreenState extends State<InitialScreen> {
           right: 190,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Container(
-              child: Icon(
-                Icons.currency_exchange,
-                color: Colors.deepPurple,
-                size: 35,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  String tempCurrency = selectedCurrencyFrom;
+                  selectedCurrencyFrom = selectedCurrencyTo;
+                  selectedCurrencyTo = tempCurrency;
+                });
+              },
+              child: Container(
+                child: Icon(
+                  Icons.swap_horiz,
+                  color: Colors.deepPurple,
+                  size: 35,
+                ),
               ),
             ),
           ),
@@ -104,18 +117,18 @@ class _InitialScreenState extends State<InitialScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Container(
               child: DropdownButtonFormField<String>(
+                menuMaxHeight: 150,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: "UserName",
                     focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                             color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
-                value: _selectedCurrency,
+                value: selectedCurrencyTo,
                 icon: Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
-                    _selectedCurrency = newValue!;
+                    selectedCurrencyTo = newValue!;
                   });
                 },
                 items:

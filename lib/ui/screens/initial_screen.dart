@@ -13,11 +13,11 @@ class _InitialScreenState extends State<InitialScreen> {
   Widget build(BuildContext context) {
     String selectedCurrencyFrom = 'USD';
     String selectedCurrencyTo = 'EUR';
-    List<String> _currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
+    List<String> currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
     return Stack(
       fit: StackFit.expand,
       children: [
-        Positioned(
+        const Positioned(
           top: 20,
           child: Center(
             child: Image(
@@ -34,7 +34,7 @@ class _InitialScreenState extends State<InitialScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
@@ -43,8 +43,8 @@ class _InitialScreenState extends State<InitialScreen> {
                       color: Colors.purple,
                     ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
               ),
             ),
@@ -59,22 +59,21 @@ class _InitialScreenState extends State<InitialScreen> {
             child: Container(
               child: DropdownButtonFormField<String>(
                 menuMaxHeight: 150,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
                 value: selectedCurrencyFrom,
-                icon: Icon(Icons.arrow_drop_down),
+                icon: const Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedCurrencyFrom = newValue!;
                   });
                 },
-                items:
-                    _currencies.map<DropdownMenuItem<String>>((String value) {
+                items: currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -99,7 +98,7 @@ class _InitialScreenState extends State<InitialScreen> {
                 });
               },
               child: Container(
-                child: Icon(
+                child: const Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
                   size: 35,
@@ -117,21 +116,20 @@ class _InitialScreenState extends State<InitialScreen> {
             child: Container(
               child: DropdownButtonFormField<String>(
                 menuMaxHeight: 150,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
                 value: selectedCurrencyTo,
-                icon: Icon(Icons.arrow_drop_down),
+                icon: const Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedCurrencyTo = newValue!;
                   });
                 },
-                items:
-                    _currencies.map<DropdownMenuItem<String>>((String value) {
+                items: currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     String selectedCurrencyFrom = 'USD';
     String selectedCurrencyTo = 'EUR';
-    List<String> _currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
+    List<String> currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
           right: 15,
           child: GestureDetector(
             onTap: () {},
-            child: Icon(
+            child: const Icon(
               Icons.settings,
               size: 50,
             ),
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           right: 85,
           child: GestureDetector(
             onTap: () {},
-            child: Icon(
+            child: const Icon(
               FontAwesomeIcons.database,
               size: 43,
             ),
@@ -55,22 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               child: DropdownButtonFormField<String>(
                 menuMaxHeight: 150,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
                 value: selectedCurrencyFrom,
-                icon: Icon(Icons.arrow_drop_down),
+                icon: const Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedCurrencyFrom = newValue!;
                   });
                 },
-                items:
-                    _currencies.map<DropdownMenuItem<String>>((String value) {
+                items: currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -95,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               child: Container(
-                child: Icon(
+                child: const Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
                   size: 35,
@@ -113,21 +112,20 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               child: DropdownButtonFormField<String>(
                 menuMaxHeight: 150,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
                 value: selectedCurrencyTo,
-                icon: Icon(Icons.arrow_drop_down),
+                icon: const Icon(Icons.arrow_drop_down),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedCurrencyTo = newValue!;
                   });
                 },
-                items:
-                    _currencies.map<DropdownMenuItem<String>>((String value) {
+                items: currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -144,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Input Amount",
@@ -153,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.purple,
                     ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
               ),
             ),
@@ -167,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Output Amount",
@@ -177,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.purple,
                     ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.deepPurple, width: 3)),
+                        borderSide:
+                            BorderSide(color: Colors.deepPurple, width: 3)),
                     hintStyle: TextStyle(color: Colors.black)),
               ),
             ),

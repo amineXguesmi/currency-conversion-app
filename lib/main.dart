@@ -1,4 +1,4 @@
-import 'package:currency_conversion/ui/screens/initialScreen.dart';
+import 'package:currency_conversion/ui/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           body: SafeArea(
-            child: InitialScreen(),
+            child: HomeScreen(),
           ),
         ));
   }

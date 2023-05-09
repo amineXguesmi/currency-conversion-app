@@ -28,7 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
           top: 26,
           right: 15,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                        title: Text(
+                          "Setting",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ));
+            },
             child: const Icon(
               Icons.settings,
               size: 50,
@@ -143,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Container(
               child: const TextField(
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Input Amount",

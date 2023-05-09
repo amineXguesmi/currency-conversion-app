@@ -61,7 +61,6 @@ class _InitialScreenState extends State<InitialScreen> {
                 menuMaxHeight: 150,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: "UserName",
                     focusedBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.deepPurple, width: 3)),

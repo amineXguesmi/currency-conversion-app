@@ -74,9 +74,15 @@ class ArchiveCard extends StatelessWidget {
           child: Row(
             children: const [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Center(child: Text("id")),
               ),
+              Expanded(
+                  flex: 1,
+                  child: VerticalDivider(
+                    thickness: 3,
+                    color: Colors.black,
+                  )),
               Expanded(
                 flex: 6,
                 child: Center(child: Text("Date")),

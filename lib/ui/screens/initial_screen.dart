@@ -1,11 +1,13 @@
+import 'package:currency_conversion/core/providers/currency_provider.dart';
+import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/home_screen.dart';
 import 'package:currency_conversion/ui/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //TODO:fix the swap icon
 class InitialScreen extends StatefulWidget {
-  final List<String> currencies;
-  const InitialScreen({super.key, required this.currencies});
+  const InitialScreen({super.key});
 
   @override
   State<InitialScreen> createState() => _InitialScreenState();
@@ -14,6 +16,7 @@ class InitialScreen extends StatefulWidget {
 class _InitialScreenState extends State<InitialScreen> {
   String from = "USD";
   String to = "USD";
+  String userName = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +33,18 @@ class _InitialScreenState extends State<InitialScreen> {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 320,
             left: 20,
             right: 20,
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    userName = value;
+                  });
+                },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
@@ -57,7 +65,8 @@ class _InitialScreenState extends State<InitialScreen> {
             right: 210,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: customDropDown(widget.currencies, from, (val) {
+              child: customDropDown(
+                  context.read<CurrencyProvider>().currencies, from, (val) {
                 setState(() {
                   from = val;
                 });
@@ -92,7 +101,8 @@ class _InitialScreenState extends State<InitialScreen> {
             right: 20,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: customDropDown(widget.currencies, to, (val) {
+              child: customDropDown(
+                  context.read<CurrencyProvider>().currencies, from, (val) {
                 setState(() {
                   to = val;
                 });
@@ -107,11 +117,12 @@ class _InitialScreenState extends State<InitialScreen> {
               padding: const EdgeInsets.all(20.0),
               child: GestureDetector(
                 onTap: () {
+                  Provider.of<UserProvider>(context, listen: false)
+                      .ChangeSettings(userName, from, to);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                           builder: (context) => HomeScreen(
-                                currencies: widget.currencies,
                                 from: from,
                                 to: to,
                               )),

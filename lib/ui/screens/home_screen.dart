@@ -1,18 +1,17 @@
+import 'package:currency_conversion/ui/screens/archive_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../../core/providers/currency_provider.dart';
+import '../../core/providers/user_provider.dart';
 import '../../core/services/api_client.dart';
 import '../widgets/custom_dropdown.dart';
 
 class HomeScreen extends StatefulWidget {
-  final List<String> currencies;
   String from;
   String to;
-  HomeScreen(
-      {super.key,
-      required this.currencies,
-      required this.from,
-      required this.to});
+  HomeScreen({super.key, required this.from, required this.to});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -20,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String output = "0";
+  String input = "0";
   ApiClient client = ApiClient();
   @override
   Widget build(BuildContext context) {
@@ -40,17 +40,97 @@ class _HomeScreenState extends State<HomeScreen> {
             child: GestureDetector(
               onTap: () {
                 showDialog(
-                    context: context,
-                    builder: (context) => const AlertDialog(
-                          title: Text(
-                            "Setting",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    title: const Center(
+                      child: Text(
+                        "Setting",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
+                    content: SizedBox(
+                      height: 200,
+                      width: 280,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 240,
+                            height: 60,
+                            child: TextField(
+                              onChanged: (value) {},
+                              decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(),
+                                  hintText: "UserName",
+                                  prefixIcon: Icon(
+                                    Icons.person,
+                                    color: Colors.purple,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.deepPurple, width: 3)),
+                                  hintStyle: TextStyle(color: Colors.black)),
                             ),
                           ),
-                        ));
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          SizedBox(
+                            width: 240,
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: 90,
+                                  color: Colors.white,
+                                  child: customDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultFrom,
+                                      (val) {
+                                    Provider.of<UserProvider>(context)
+                                        .setDefaulftFrom(val);
+                                  }),
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                  child: Icon(
+                                    Icons.swap_horiz,
+                                    color: Colors.purple,
+                                    size: 50,
+                                  ),
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 90,
+                                  color: Colors.white,
+                                  child: customDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultTo,
+                                      (val) {
+                                    Provider.of<UserProvider>(context)
+                                        .setDefaultTo(val);
+                                  }),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               },
               child: const Icon(
                 Icons.settings,
@@ -62,7 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 30,
             right: 85,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ArchiveScreen()));
+              },
               child: const Icon(
                 FontAwesomeIcons.database,
                 size: 43,
@@ -76,7 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                child: customDropDown(widget.currencies, widget.from, (val) {
+                child: customDropDown(
+                    context.read<CurrencyProvider>().currencies, widget.from,
+                    (val) {
                   setState(() {
                     widget.from = val;
                   });
@@ -115,7 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                child: customDropDown(widget.currencies, widget.to, (val) {
+                child: customDropDown(
+                    context.read<CurrencyProvider>().currencies, widget.to,
+                    (val) {
                   setState(() {
                     widget.to = val;
                   });
@@ -152,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     } else {
                       setState(() {
+                        input = value;
                         output = (rate * (double.parse(value))).toString();
                       });
                     }
@@ -182,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                     child: Text(
                   output,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),

@@ -1,6 +1,11 @@
+import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/widgets/archive_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../core/providers/currency_provider.dart';
+import '../widgets/custom_dropdown.dart';
 
 class ArchiveScreen extends StatefulWidget {
   const ArchiveScreen({Key? key}) : super(key: key);
@@ -10,9 +15,6 @@ class ArchiveScreen extends StatefulWidget {
 }
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
-  String selectedCurrencyFrom = 'USD';
-  String selectedCurrencyTo = 'EUR';
-  List<String> currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +36,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
+                    backgroundColor: Colors.transparent,
                     title: const Center(
                       child: Text(
                         "Setting",
@@ -44,23 +47,19 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                         ),
                       ),
                     ),
-                    content: Container(
-                      height: 270,
-                      width: 200,
+                    content: SizedBox(
+                      height: 200,
+                      width: 280,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           SizedBox(
-                            height: 10,
-                          ),
-                          Text("Change Username :"),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            width: 240,
+                            height: 60,
                             child: TextField(
-                              decoration: InputDecoration(
+                              onChanged: (value) {},
+                              decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
                                   border: OutlineInputBorder(),
                                   hintText: "UserName",
                                   prefixIcon: Icon(
@@ -73,10 +72,54 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                   hintStyle: TextStyle(color: Colors.black)),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
+                          const SizedBox(
+                            height: 30,
                           ),
-                          Text("Change Default Conversion :"),
+                          SizedBox(
+                            width: 240,
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: 90,
+                                  color: Colors.white,
+                                  child: customDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultFrom,
+                                      (val) {
+                                    Provider.of<UserProvider>(context)
+                                        .setDefaulftFrom(val);
+                                  }),
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                  child: Icon(
+                                    Icons.swap_horiz,
+                                    color: Colors.purple,
+                                    size: 50,
+                                  ),
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 90,
+                                  color: Colors.white,
+                                  child: customDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultTo,
+                                      (val) {
+                                    Provider.of<UserProvider>(context)
+                                        .setDefaultTo(val);
+                                  }),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),

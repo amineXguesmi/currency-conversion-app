@@ -1,6 +1,8 @@
 import 'package:currency_conversion/ui/screens/initial_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../core/providers/currency_provider.dart';
 import '../../core/services/api_client.dart';
 
 class SplachScreen extends StatefulWidget {
@@ -20,13 +22,9 @@ class _SplachScreenState extends State<SplachScreen> {
   }
 
   void getCurrencies() async {
-    List<String> currencies = await client.getCurrencies();
+    await Provider.of<CurrencyProvider>(context, listen: false).GetCurrencies();
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => InitialScreen(
-                  currencies: currencies,
-                )));
+        context, MaterialPageRoute(builder: (context) => InitialScreen()));
   }
 
   @override

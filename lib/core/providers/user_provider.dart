@@ -9,9 +9,6 @@ class UserProvider extends ChangeNotifier {
     this.userName = userName;
     this.defaultFrom = defaultFrom;
     this.defaultTo = defaultTo;
-    print(this.userName);
-    print(this.defaultTo);
-    print(this.defaultFrom);
     notifyListeners();
   }
 

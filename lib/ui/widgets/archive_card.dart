@@ -11,49 +11,81 @@ class ArchiveCard extends StatelessWidget {
         onTap: () {
           showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text(
-                      'Conversion Details',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w900),
-                    ),
-                    content: SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            "Date : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 20),
+              builder: (context) => Dialog(
+                    child: SizedBox(
+                      width: 450,
+                      height: 200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Image.asset(
+                              "assets/conversion.png",
+                            ),
                           ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "Time :",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "Amount from : ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "Amount To :",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 20),
-                          ),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Center(
+                                child: Text(
+                                  "Conversion Details",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Date : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(child: Text("**//****/**")),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Time :",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(child: Text("11100:1000")),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Conversion from :",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(child: Text("123132USD")),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "conversion to : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(child: Text("15646Dn")),
+                            ],
+                          ))
                         ],
                       ),
                     ),

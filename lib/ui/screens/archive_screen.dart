@@ -56,20 +56,26 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                             width: 240,
                             height: 60,
                             child: TextField(
-                              onChanged: (value) {},
-                              decoration: const InputDecoration(
+                              onChanged: (value) {
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .setUsername(value);
+                              },
+                              decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
-                                  border: OutlineInputBorder(),
-                                  hintText: "UserName",
-                                  prefixIcon: Icon(
+                                  border: const OutlineInputBorder(),
+                                  hintText:
+                                      context.read<UserProvider>().userName,
+                                  prefixIcon: const Icon(
                                     Icons.person,
                                     color: Colors.purple,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: Colors.deepPurple, width: 3)),
-                                  hintStyle: TextStyle(color: Colors.black)),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black)),
                             ),
                           ),
                           const SizedBox(
@@ -91,7 +97,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                           .currencies,
                                       context.read<UserProvider>().defaultFrom,
                                       (val) {
-                                    Provider.of<UserProvider>(context)
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
                                         .setDefaulftFrom(val);
                                   }),
                                 ),
@@ -113,7 +120,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                           .currencies,
                                       context.read<UserProvider>().defaultTo,
                                       (val) {
-                                    Provider.of<UserProvider>(context)
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
                                         .setDefaultTo(val);
                                   }),
                                 ),

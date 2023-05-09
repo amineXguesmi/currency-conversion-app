@@ -38,14 +38,14 @@ class _InitialScreenState extends State<InitialScreen> {
             left: 20,
             right: 20,
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
                 onChanged: (value) {
                   setState(() {
                     userName = value;
                   });
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
                     prefixIcon: Icon(
@@ -102,7 +102,7 @@ class _InitialScreenState extends State<InitialScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: customDropDown(
-                  context.read<CurrencyProvider>().currencies, from, (val) {
+                  context.read<CurrencyProvider>().currencies, to, (val) {
                 setState(() {
                   to = val;
                 });

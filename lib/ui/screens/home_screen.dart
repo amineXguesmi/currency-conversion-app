@@ -62,20 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 240,
                             height: 60,
                             child: TextField(
-                              onChanged: (value) {},
-                              decoration: const InputDecoration(
+                              onChanged: (value) {
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .setUsername(value);
+                              },
+                              decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
-                                  border: OutlineInputBorder(),
-                                  hintText: "UserName",
-                                  prefixIcon: Icon(
+                                  border: const OutlineInputBorder(),
+                                  hintText:
+                                      context.read<UserProvider>().userName,
+                                  prefixIcon: const Icon(
                                     Icons.person,
                                     color: Colors.purple,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: Colors.deepPurple, width: 3)),
-                                  hintStyle: TextStyle(color: Colors.black)),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black)),
                             ),
                           ),
                           const SizedBox(
@@ -97,7 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .currencies,
                                       context.read<UserProvider>().defaultFrom,
                                       (val) {
-                                    Provider.of<UserProvider>(context)
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
                                         .setDefaulftFrom(val);
                                   }),
                                 ),
@@ -119,7 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .currencies,
                                       context.read<UserProvider>().defaultTo,
                                       (val) {
-                                    Provider.of<UserProvider>(context)
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
                                         .setDefaultTo(val);
                                   }),
                                 ),
@@ -185,12 +193,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     widget.to = temp;
                   });
                 },
-                child: Container(
-                  child: const Icon(
-                    Icons.swap_horiz,
-                    color: Colors.deepPurple,
-                    size: 35,
-                  ),
+                child: const Icon(
+                  Icons.swap_horiz,
+                  color: Colors.deepPurple,
+                  size: 35,
                 ),
               ),
             ),
@@ -218,35 +224,33 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 20,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Container(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Input Amount",
-                    prefixIcon: Icon(
-                      Icons.numbers,
-                      color: Colors.purple,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.deepPurple, width: 3)),
-                    hintStyle: TextStyle(color: Colors.black),
+              child: TextField(
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Input Amount",
+                  prefixIcon: Icon(
+                    Icons.numbers,
+                    color: Colors.purple,
                   ),
-                  onChanged: (value) async {
-                    double rate = await client.getRate(widget.from, widget.to);
-                    if (value.isEmpty) {
-                      setState(() {
-                        output = "0";
-                      });
-                    } else {
-                      setState(() {
-                        input = value;
-                        output = (rate * (double.parse(value))).toString();
-                      });
-                    }
-                  },
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.deepPurple, width: 3)),
+                  hintStyle: TextStyle(color: Colors.black),
                 ),
+                onChanged: (value) async {
+                  double rate = await client.getRate(widget.from, widget.to);
+                  if (value.isEmpty) {
+                    setState(() {
+                      output = "0";
+                    });
+                  } else {
+                    setState(() {
+                      input = value;
+                      output = (rate * (double.parse(value))).toString();
+                    });
+                  }
+                },
               ),
             ),
           ),
@@ -318,6 +322,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40),
               child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomeScreen(
+                              from: context.read<UserProvider>().defaultFrom,
+                              to: context.read<UserProvider>().defaultTo)));
+                },
                 child: Container(
                   height: 50,
                   width: 40,

@@ -1,40 +1,42 @@
+import 'package:currency_conversion/ui/screens/home_screen.dart';
+import 'package:currency_conversion/ui/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
 //TODO:fix the swap icon
 class InitialScreen extends StatefulWidget {
-  const InitialScreen({Key? key}) : super(key: key);
+  final List<String> currencies;
+  const InitialScreen({super.key, required this.currencies});
 
   @override
   State<InitialScreen> createState() => _InitialScreenState();
 }
 
 class _InitialScreenState extends State<InitialScreen> {
+  String from = "USD";
+  String to = "USD";
   @override
   Widget build(BuildContext context) {
-    String selectedCurrencyFrom = 'USD';
-    String selectedCurrencyTo = 'EUR';
-    List<String> currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CAD', 'AUD'];
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        const Positioned(
-          top: 20,
-          child: Center(
-            child: Image(
-              height: 400,
-              width: 420,
-              image: AssetImage('assets/logo.png'),
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const Positioned(
+            top: 20,
+            child: Center(
+              child: Image(
+                height: 400,
+                width: 420,
+                image: AssetImage('assets/logo.png'),
+              ),
             ),
           ),
-        ),
-        Positioned(
-          top: 320,
-          left: 20,
-          right: 20,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              child: const TextField(
+          const Positioned(
+            top: 320,
+            left: 20,
+            right: 20,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "UserName",
@@ -49,54 +51,33 @@ class _InitialScreenState extends State<InitialScreen> {
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: 420,
-          left: 20,
-          right: 210,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              child: DropdownButtonFormField<String>(
-                menuMaxHeight: 150,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.deepPurple, width: 3)),
-                    hintStyle: TextStyle(color: Colors.black)),
-                value: selectedCurrencyFrom,
-                icon: const Icon(Icons.arrow_drop_down),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedCurrencyFrom = newValue!;
-                  });
-                },
-                items: currencies.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
+          Positioned(
+            top: 420,
+            left: 20,
+            right: 210,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: customDropDown(widget.currencies, from, (val) {
+                setState(() {
+                  from = val;
+                });
+              }),
             ),
           ),
-        ),
-        Positioned(
-          top: 445,
-          left: 163,
-          right: 190,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  String tempCurrency = selectedCurrencyFrom;
-                  selectedCurrencyFrom = selectedCurrencyTo;
-                  selectedCurrencyTo = tempCurrency;
-                });
-              },
-              child: Container(
+          Positioned(
+            top: 445,
+            left: 163,
+            right: 190,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GestureDetector(
+                onTap: () {
+                  String temp = from;
+                  setState(() {
+                    from = to;
+                    to = temp;
+                  });
+                },
                 child: const Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
@@ -105,73 +86,65 @@ class _InitialScreenState extends State<InitialScreen> {
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: 420,
-          left: 200,
-          right: 20,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              child: DropdownButtonFormField<String>(
-                menuMaxHeight: 150,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.deepPurple, width: 3)),
-                    hintStyle: TextStyle(color: Colors.black)),
-                value: selectedCurrencyTo,
-                icon: const Icon(Icons.arrow_drop_down),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedCurrencyTo = newValue!;
-                  });
+          Positioned(
+            top: 420,
+            left: 200,
+            right: 20,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: customDropDown(widget.currencies, to, (val) {
+                setState(() {
+                  to = val;
+                });
+              }),
+            ),
+          ),
+          Positioned(
+            top: 520,
+            left: 60,
+            right: 60,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomeScreen(
+                                currencies: widget.currencies,
+                                from: from,
+                                to: to,
+                              )),
+                      (route) => false);
                 },
-                items: currencies.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 520,
-          left: 60,
-          right: 60,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: GestureDetector(
-              child: Container(
-                height: 70,
-                width: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromRGBO(143, 148, 251, 1),
-                      Color.fromRGBO(143, 148, 251, 0.9),
-                      Color.fromRGBO(143, 148, 251, 0.2),
-                    ],
+                child: Container(
+                  height: 70,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromRGBO(143, 148, 251, 1),
+                        Color.fromRGBO(143, 148, 251, 0.9),
+                        Color.fromRGBO(143, 148, 251, 0.2),
+                      ],
+                    ),
                   ),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Start",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19),
+                  child: const Center(
+                    child: Text(
+                      "Start",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 19),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

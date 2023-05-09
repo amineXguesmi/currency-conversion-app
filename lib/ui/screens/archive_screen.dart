@@ -1,3 +1,4 @@
+import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/widgets/archive_card.dart';
 import 'package:flutter/material.dart';
@@ -160,12 +161,16 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  children: const [
-                    ArchiveCard(),
-                    ArchiveCard(),
-                    ArchiveCard(),
-                  ],
-                ),
+                    children: context
+                        .watch<ArchiveProvier>()
+                        .conversionList
+                        .map((e) => ArchiveCard(
+                              date: e.date,
+                              time: e.time,
+                              conversionFrom: e.conversionFrom,
+                              conversionTo: e.conversionTo,
+                            ))
+                        .toList()),
               ),
             ),
           ),

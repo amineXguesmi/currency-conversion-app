@@ -1,3 +1,5 @@
+import 'package:currency_conversion/core/models/conversion.dart';
+import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:currency_conversion/ui/screens/archive_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -291,6 +293,26 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40),
               child: GestureDetector(
+                onTap: () {
+                  DateTime now = DateTime.now();
+                  int year = now.year;
+                  int month = now.month;
+                  int day = now.day;
+                  String date = '$day/$month/$year';
+                  int hour = now.hour;
+                  int minute = now.minute;
+                  int second = now.second;
+                  String time = '$hour:$minute:$second';
+                  String conversionFrom = '$input:${widget.from}';
+                  String conversionTo = '$output:${widget.to}';
+                  Conversion conversion = Conversion(
+                      date: date,
+                      time: time,
+                      conversionFrom: conversionFrom,
+                      conversionTo: conversionTo);
+                  Provider.of<ArchiveProvier>(context, listen: false)
+                      .AddConversion(conversion);
+                },
                 child: Container(
                   height: 50,
                   width: 40,
@@ -323,12 +345,14 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 40, right: 40),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomeScreen(
-                              from: context.read<UserProvider>().defaultFrom,
-                              to: context.read<UserProvider>().defaultTo)));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(
+                            from: context.read<UserProvider>().defaultFrom,
+                            to: context.read<UserProvider>().defaultTo)),
+                    (route) => false,
+                  );
                 },
                 child: Container(
                   height: 50,

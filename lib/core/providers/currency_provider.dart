@@ -1,5 +1,5 @@
 import 'package:currency_conversion/core/services/api_client.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class CurrencyProvider extends ChangeNotifier {
   List<String> currencies = [];

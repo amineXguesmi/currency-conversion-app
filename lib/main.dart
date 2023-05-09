@@ -1,3 +1,4 @@
+import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:currency_conversion/core/providers/currency_provider.dart';
 import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/splash_screen.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider<ArchiveProvier>(
+          create: (_) => ArchiveProvier(),
         ),
       ],
       child: MaterialApp(

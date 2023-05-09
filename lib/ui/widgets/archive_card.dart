@@ -1,7 +1,17 @@
+import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ArchiveCard extends StatelessWidget {
-  const ArchiveCard({Key? key}) : super(key: key);
+  String date;
+  String time;
+  String conversionFrom;
+  String conversionTo;
+  ArchiveCard(
+      {required this.date,
+      required this.time,
+      required this.conversionFrom,
+      required this.conversionTo});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +24,7 @@ class ArchiveCard extends StatelessWidget {
               builder: (context) => Dialog(
                     child: SizedBox(
                       width: 450,
-                      height: 200,
+                      height: 240,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -26,8 +36,8 @@ class ArchiveCard extends StatelessWidget {
                           Expanded(
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Center(
+                            children: [
+                              const Center(
                                 child: Text(
                                   "Conversion Details",
                                   style: TextStyle(
@@ -36,54 +46,54 @@ class ArchiveCard extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text(
+                              const Text(
                                 "Date : ",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text("**//****/**")),
-                              SizedBox(
+                              Center(child: Text(this.date)),
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text(
+                              const Text(
                                 "Time :",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text("11100:1000")),
-                              SizedBox(
+                              Center(child: Text(this.time)),
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text(
+                              const Text(
                                 "Conversion from :",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text("123132USD")),
-                              SizedBox(
+                              Center(child: Text(this.conversionFrom)),
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text(
+                              const Text(
                                 "conversion to : ",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text("15646Dn")),
+                              Center(child: Text(this.conversionTo)),
                             ],
                           ))
                         ],
@@ -92,7 +102,7 @@ class ArchiveCard extends StatelessWidget {
                   ));
         },
         child: Container(
-          height: 40,
+          height: 60,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -104,20 +114,66 @@ class ArchiveCard extends StatelessWidget {
                 )
               ]),
           child: Row(
-            children: const [
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
               Expanded(
-                flex: 1,
-                child: Center(child: Text("id")),
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Center(
+                        child: Text(
+                          "Date :",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(this.date),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              Expanded(
+              const Expanded(
                   flex: 1,
                   child: VerticalDivider(
                     thickness: 3,
                     color: Colors.black,
                   )),
               Expanded(
-                flex: 6,
-                child: Center(child: Text("Date")),
+                flex: 5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text(
+                        "Result of Conversion :",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(this.conversionTo),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Provider.of<ArchiveProvier>(context, listen: false)
+                        .deleteConversion(this.time);
+                  },
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ),
               ),
             ],
           ),

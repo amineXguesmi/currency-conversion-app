@@ -6,7 +6,7 @@ class CurrencyProvider extends ChangeNotifier {
   get getCurrencies => currencies;
   ApiClient client = ApiClient();
 
-  Future<bool> GetCurrencies() async {
+  Future<bool> fetchCurrencies() async {
     currencies = await client.getCurrencies();
     notifyListeners();
     return true;

@@ -1,9 +1,12 @@
+import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/initial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/providers/currency_provider.dart';
 import '../../core/services/api_client.dart';
+import 'home_screen.dart';
 
 class SplachScreen extends StatefulWidget {
   const SplachScreen({Key? key}) : super(key: key);
@@ -16,15 +19,26 @@ class _SplachScreenState extends State<SplachScreen> {
   ApiClient client = ApiClient();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrencies();
   }
 
   void getCurrencies() async {
-    await Provider.of<CurrencyProvider>(context, listen: false).GetCurrencies();
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => InitialScreen()));
+    await Provider.of<CurrencyProvider>(context, listen: false)
+        .fetchCurrencies();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if ((prefs.getString("username") != null) &&
+        (prefs.getString("defaultFrom") != null) &&
+        (prefs.getString("defaultTo") != null)) {
+      await Provider.of<UserProvider>(context, listen: false).getStorageData();
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (route) => false);
+    } else {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const InitialScreen()));
+    }
   }
 
   @override

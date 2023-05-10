@@ -4,8 +4,8 @@ import 'package:currency_conversion/ui/screens/home_screen.dart';
 import 'package:currency_conversion/ui/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-//TODO:fix the swap icon
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
 
@@ -17,6 +17,7 @@ class _InitialScreenState extends State<InitialScreen> {
   String from = "USD";
   String to = "USD";
   String userName = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,7 @@ class _InitialScreenState extends State<InitialScreen> {
             right: 210,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: customDropDown(
+              child: CustomDropDown(
                   context.read<CurrencyProvider>().currencies, from, (val) {
                 setState(() {
                   from = val;
@@ -101,7 +102,7 @@ class _InitialScreenState extends State<InitialScreen> {
             right: 20,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: customDropDown(
+              child: CustomDropDown(
                   context.read<CurrencyProvider>().currencies, to, (val) {
                 setState(() {
                   to = val;
@@ -116,16 +117,17 @@ class _InitialScreenState extends State<InitialScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Provider.of<UserProvider>(context, listen: false)
-                      .ChangeSettings(userName, from, to);
+                      .changeSettings(userName, from, to);
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString("username", userName);
+                  prefs.setString("defaultFrom", from);
+                  prefs.setString("defaultTo", to);
                   Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => HomeScreen(
-                                from: from,
-                                to: to,
-                              )),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                       (route) => false);
                 },
                 child: Container(

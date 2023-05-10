@@ -8,7 +8,8 @@ class ArchiveCard extends StatelessWidget {
   String conversionFrom;
   String conversionTo;
   ArchiveCard(
-      {required this.date,
+      {super.key,
+      required this.date,
       required this.time,
       required this.conversionFrom,
       required this.conversionTo});
@@ -57,7 +58,7 @@ class ArchiveCard extends StatelessWidget {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text(this.date)),
+                              Center(child: Text(date)),
                               const SizedBox(
                                 height: 5,
                               ),
@@ -69,7 +70,7 @@ class ArchiveCard extends StatelessWidget {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text(this.time)),
+                              Center(child: Text(time)),
                               const SizedBox(
                                 height: 5,
                               ),
@@ -81,7 +82,7 @@ class ArchiveCard extends StatelessWidget {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text(this.conversionFrom)),
+                              Center(child: Text(conversionFrom)),
                               const SizedBox(
                                 height: 5,
                               ),
@@ -93,7 +94,7 @@ class ArchiveCard extends StatelessWidget {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Center(child: Text(this.conversionTo)),
+                              Center(child: Text(conversionTo)),
                             ],
                           ))
                         ],
@@ -130,7 +131,7 @@ class ArchiveCard extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text(this.date),
+                      Text(date),
                       const SizedBox(
                         height: 6,
                       ),
@@ -156,7 +157,7 @@ class ArchiveCard extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Text(this.conversionTo),
+                    Text(conversionTo),
                     const SizedBox(
                       height: 6,
                     ),
@@ -167,7 +168,7 @@ class ArchiveCard extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Provider.of<ArchiveProvier>(context, listen: false)
-                        .deleteConversion(this.time);
+                        .deleteConversion(time);
                   },
                   child: const Icon(
                     Icons.delete,

@@ -92,7 +92,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                   height: 100,
                                   width: 90,
                                   color: Colors.white,
-                                  child: customDropDown(
+                                  child: CustomDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,
@@ -115,7 +115,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                   height: 100,
                                   width: 90,
                                   color: Colors.white,
-                                  child: customDropDown(
+                                  child: CustomDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,

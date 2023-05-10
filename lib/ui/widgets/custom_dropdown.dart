@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget customDropDown(List<String> items, String value, void onChange(val)) {
+Widget CustomDropDown(List<String> items, String value, void onChange(val)) {
   return DropdownButtonFormField<String>(
     menuMaxHeight: 200,
     decoration: const InputDecoration(
@@ -18,8 +18,8 @@ Widget customDropDown(List<String> items, String value, void onChange(val)) {
     },
     items: items.map<DropdownMenuItem<String>>((String val) {
       return DropdownMenuItem(
-        child: Text(val),
         value: val,
+        child: Text(val),
       );
     }).toList(),
   );

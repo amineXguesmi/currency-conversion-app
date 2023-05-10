@@ -11,9 +11,7 @@ import '../../core/services/api_client.dart';
 import '../widgets/custom_dropdown.dart';
 
 class HomeScreen extends StatefulWidget {
-  String from;
-  String to;
-  HomeScreen({super.key, required this.from, required this.to});
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,6 +21,38 @@ class _HomeScreenState extends State<HomeScreen> {
   String output = "0";
   String input = "0";
   ApiClient client = ApiClient();
+  final TextEditingController inputController =
+      TextEditingController(text: "0");
+  final TextEditingController outputController =
+      TextEditingController(text: "0");
+
+  @override
+  void dispose() {
+    inputController.dispose();
+    outputController.dispose();
+    super.dispose();
+  }
+
+  void convertInputToOutput(from, to) async {
+    double rate = await client.getRate(from, to);
+    double inputValue = double.tryParse(inputController.text) ?? 0;
+    double outputValue = rate * inputValue;
+    setState(() {
+      output = outputValue.toString();
+      outputController.text = output;
+    });
+  }
+
+  void convertOutputToInput(from, to) async {
+    double rate = await client.getRate(to, from);
+    double outputValue = double.tryParse(outputController.text) ?? 0;
+    double inputValue = rate * outputValue;
+    setState(() {
+      input = inputValue.toString();
+      inputController.text = input;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 100,
                                   width: 90,
                                   color: Colors.white,
-                                  child: customDropDown(
+                                  child: CustomDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,
@@ -122,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 100,
                                   width: 90,
                                   color: Colors.white,
-                                  child: customDropDown(
+                                  child: CustomDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,
@@ -171,34 +201,50 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                child: customDropDown(
-                    context.read<CurrencyProvider>().currencies, widget.from,
-                    (val) {
-                  setState(() {
-                    widget.from = val;
-                  });
-                }),
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [0, 0.7, 1],
+                    colors: [
+                      Color(0xFF49125c),
+                      Color(0xFf3b246a),
+                      Color(0xFF926b9f),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                    child: Text(
+                  context.watch<UserProvider>().defaultFrom,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.white,
+                  ),
+                )),
               ),
             ),
           ),
           Positioned(
-            top: 225,
-            left: 169,
+            top: 210,
+            left: 159,
             right: 190,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
                 onTap: () {
-                  String temp = widget.from;
-                  setState(() {
-                    widget.from = widget.to;
-                    widget.to = temp;
-                  });
+                  Provider.of<UserProvider>(context, listen: false)
+                      .swipeDefault();
+                  convertInputToOutput(context.read<UserProvider>().defaultFrom,
+                      context.read<UserProvider>().defaultTo);
                 },
                 child: const Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
-                  size: 35,
+                  size: 55,
                 ),
               ),
             ),
@@ -210,13 +256,30 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                child: customDropDown(
-                    context.read<CurrencyProvider>().currencies, widget.to,
-                    (val) {
-                  setState(() {
-                    widget.to = val;
-                  });
-                }),
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [0, 0.7, 1],
+                    colors: [
+                      Color(0xFF49125c),
+                      Color(0xFf3b246a),
+                      Color(0xFF926b9f),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                    child: Text(
+                  context.watch<UserProvider>().defaultTo,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.white,
+                  ),
+                )),
               ),
             ),
           ),
@@ -227,6 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextField(
+                controller: inputController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -240,18 +304,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           BorderSide(color: Colors.deepPurple, width: 3)),
                   hintStyle: TextStyle(color: Colors.black),
                 ),
-                onChanged: (value) async {
-                  double rate = await client.getRate(widget.from, widget.to);
-                  if (value.isEmpty) {
-                    setState(() {
-                      output = "0";
-                    });
-                  } else {
-                    setState(() {
-                      input = value;
-                      output = (rate * (double.parse(value))).toString();
-                    });
-                  }
+                onChanged: (value) {
+                  convertInputToOutput(context.read<UserProvider>().defaultFrom,
+                      context.read<UserProvider>().defaultTo);
                 },
               ),
             ),
@@ -262,36 +317,34 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 20,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.deepPurple, width: 3),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(256, 256, 256, 0.4),
-                        blurRadius: 20.0,
-                        offset: Offset(0, 2),
-                      )
-                    ]),
-                child: Center(
-                    child: Text(
-                  output,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+              child: TextField(
+                controller: outputController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Output Amount",
+                  prefixIcon: Icon(
+                    Icons.numbers,
+                    color: Colors.purple,
                   ),
-                )),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.deepPurple, width: 3)),
+                  hintStyle: TextStyle(color: Colors.black),
+                ),
+                onChanged: (value) {
+                  convertOutputToInput(context.read<UserProvider>().defaultFrom,
+                      context.read<UserProvider>().defaultTo);
+                },
               ),
             ),
           ),
           Positioned(
-            top: 530,
-            left: 60,
-            right: 60,
+            top: 650,
+            left: 20,
+            right: 20,
             child: Padding(
-              padding: const EdgeInsets.only(left: 40, right: 40),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: GestureDetector(
                 onTap: () {
                   DateTime now = DateTime.now();
@@ -303,8 +356,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   int minute = now.minute;
                   int second = now.second;
                   String time = '$hour:$minute:$second';
-                  String conversionFrom = '$input:${widget.from}';
-                  String conversionTo = '$output:${widget.to}';
+                  String conversionFrom =
+                      '$input:${context.watch<UserProvider>().defaultFrom}';
+                  String conversionTo =
+                      '$output:${context.watch<UserProvider>().defaultTo}';
                   Conversion conversion = Conversion(
                       date: date,
                       time: time,
@@ -314,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       .AddConversion(conversion);
                 },
                 child: Container(
-                  height: 50,
+                  height: 60,
                   width: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -338,24 +393,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: 590,
-            left: 60,
-            right: 60,
+            top: 730,
+            left: 20,
+            right: 20,
             child: Padding(
-              padding: const EdgeInsets.only(left: 40, right: 40),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreen(
-                            from: context.read<UserProvider>().defaultFrom,
-                            to: context.read<UserProvider>().defaultTo)),
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                     (route) => false,
                   );
                 },
                 child: Container(
-                  height: 50,
+                  height: 60,
                   width: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),

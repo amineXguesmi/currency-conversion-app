@@ -1,12 +1,12 @@
-class MediaQuery {
+class Mediaquery {
   double mediaHeight;
   double mediaWidth;
-  MediaQuery({required this.mediaHeight, required this.mediaWidth});
+  Mediaquery({required this.mediaHeight, required this.mediaWidth});
   double getHeight(double value) {
-    return (value / 856.7272727272727) * this.mediaHeight;
+    return (value / 856.7272727272727) * mediaHeight;
   }
 
-  double getwidht(double value) {
-    return (value / 392.72727272727275) * this.mediaWidth;
+  double getWidht(double value) {
+    return (value / 392.72727272727275) * mediaWidth;
   }
 }

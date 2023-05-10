@@ -2,6 +2,8 @@ import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utilities/media_query.dart';
+
 class ArchiveCard extends StatelessWidget {
   String date;
   String time;
@@ -16,16 +18,20 @@ class ArchiveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double deviceWidth = MediaQuery.of(context).size.width;
+    Mediaquery media =
+        Mediaquery(mediaHeight: deviceHeight, mediaWidth: deviceWidth);
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.all(media.getWidht(12.0)),
       child: GestureDetector(
         onTap: () {
           showDialog(
               context: context,
               builder: (context) => Dialog(
                     child: SizedBox(
-                      width: 450,
-                      height: 240,
+                      width: media.getWidht(450),
+                      height: media.getHeight(240),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -38,61 +44,65 @@ class ArchiveCard extends StatelessWidget {
                               child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Center(
+                              Center(
                                 child: Text(
                                   "Conversion Details",
                                   style: TextStyle(
                                       color: Colors.red,
-                                      fontSize: 18,
+                                      fontSize: media.getWidht(18),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(15),
                               ),
-                              const Text(
+                              Text(
                                 "Date : ",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: media.getWidht(15)),
                               ),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
                               Center(child: Text(date)),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
-                              const Text(
+                              Text(
                                 "Time :",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: media.getWidht(15)),
                               ),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
                               Center(child: Text(time)),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
-                              const Text(
+                              Text(
                                 "Conversion from :",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: media.getWidht(15)),
                               ),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
                               Center(child: Text(conversionFrom)),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
-                              const Text(
+                              Text(
                                 "conversion to : ",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: media.getWidht(15)),
                               ),
-                              const SizedBox(
-                                height: 5,
+                              SizedBox(
+                                height: media.getHeight(5),
                               ),
                               Center(child: Text(conversionTo)),
                             ],
@@ -103,14 +113,14 @@ class ArchiveCard extends StatelessWidget {
                   ));
         },
         child: Container(
-          height: 60,
+          height: media.getHeight(60),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
+              borderRadius: BorderRadius.circular(media.getWidht(10)),
+              boxShadow: [
                 BoxShadow(
                   color: Color.fromRGBO(256, 256, 256, 0.5),
-                  blurRadius: 20.0,
+                  blurRadius: media.getWidht(20),
                   offset: Offset(0, 10),
                 )
               ]),
@@ -120,7 +130,7 @@ class ArchiveCard extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 5),
+                  padding: EdgeInsets.only(left: media.getWidht(5)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,8 +142,8 @@ class ArchiveCard extends StatelessWidget {
                         ),
                       ),
                       Text(date),
-                      const SizedBox(
-                        height: 6,
+                      SizedBox(
+                        height: media.getHeight(6),
                       ),
                     ],
                   ),
@@ -158,8 +168,8 @@ class ArchiveCard extends StatelessWidget {
                       ),
                     ),
                     Text(conversionTo),
-                    const SizedBox(
-                      height: 6,
+                    SizedBox(
+                      height: media.getHeight(6),
                     ),
                   ],
                 ),

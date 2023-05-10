@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utilities/media_query.dart';
+
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
 
@@ -20,26 +22,30 @@ class _InitialScreenState extends State<InitialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double deviceWidth = MediaQuery.of(context).size.width;
+    Mediaquery media =
+        Mediaquery(mediaHeight: deviceHeight, mediaWidth: deviceWidth);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const Positioned(
-            top: 20,
+          Positioned(
+            top: media.getHeight(20),
             child: Center(
               child: Image(
-                height: 400,
-                width: 420,
+                height: media.getHeight(400),
+                width: media.getWidht(420),
                 image: AssetImage('assets/logo.png'),
               ),
             ),
           ),
           Positioned(
-            top: 320,
-            left: 20,
-            right: 20,
+            top: media.getHeight(320),
+            left: media.getWidht(20),
+            right: media.getWidht(20),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(media.getWidht(20.0)),
               child: TextField(
                 onChanged: (value) {
                   setState(() {
@@ -61,11 +67,11 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
           ),
           Positioned(
-            top: 420,
-            left: 20,
-            right: 210,
+            top: media.getHeight(420),
+            left: media.getWidht(20),
+            right: media.getWidht(210),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(media.getWidht(20)),
               child: CustomDropDown(
                   context.read<CurrencyProvider>().currencies, from, (val) {
                 setState(() {
@@ -75,11 +81,11 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
           ),
           Positioned(
-            top: 445,
-            left: 163,
-            right: 190,
+            top: media.getHeight(445),
+            left: media.getWidht(163),
+            right: media.getWidht(190),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(media.getWidht(10)),
               child: GestureDetector(
                 onTap: () {
                   String temp = from;
@@ -88,20 +94,20 @@ class _InitialScreenState extends State<InitialScreen> {
                     to = temp;
                   });
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
-                  size: 35,
+                  size: media.getWidht(35),
                 ),
               ),
             ),
           ),
           Positioned(
-            top: 420,
-            left: 200,
-            right: 20,
+            top: media.getHeight(420),
+            left: media.getWidht(200),
+            right: media.getWidht(20),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(media.getWidht(20)),
               child: CustomDropDown(
                   context.read<CurrencyProvider>().currencies, to, (val) {
                 setState(() {
@@ -111,11 +117,11 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
           ),
           Positioned(
-            top: 520,
-            left: 60,
-            right: 60,
+            top: media.getHeight(520),
+            left: media.getWidht(60),
+            right: media.getWidht(60),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(media.getWidht(20.0)),
               child: GestureDetector(
                 onTap: () async {
                   Provider.of<UserProvider>(context, listen: false)
@@ -131,10 +137,10 @@ class _InitialScreenState extends State<InitialScreen> {
                       (route) => false);
                 },
                 child: Container(
-                  height: 70,
-                  width: 50,
+                  height: media.getHeight(70),
+                  width: media.getWidht(50),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(media.getWidht(10)),
                     gradient: const LinearGradient(
                       colors: [
                         Color.fromRGBO(143, 148, 251, 1),
@@ -143,13 +149,13 @@ class _InitialScreenState extends State<InitialScreen> {
                       ],
                     ),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Start",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 19),
+                          fontSize: media.getWidht(19)),
                     ),
                   ),
                 ),

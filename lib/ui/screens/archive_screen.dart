@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/providers/currency_provider.dart';
+import '../utilities/media_query.dart';
 import '../widgets/custom_dropdown.dart';
 
 class ArchiveScreen extends StatefulWidget {
@@ -18,44 +19,48 @@ class ArchiveScreen extends StatefulWidget {
 class _ArchiveScreenState extends State<ArchiveScreen> {
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double deviceWidth = MediaQuery.of(context).size.width;
+    Mediaquery media =
+        Mediaquery(mediaHeight: deviceHeight, mediaWidth: deviceWidth);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const Positioned(
-            top: 10,
+          Positioned(
+            top: media.getHeight(10),
             child: Image(
-              width: 110,
+              width: media.getWidht(110),
               image: AssetImage('assets/logo.png'),
             ),
           ),
           Positioned(
-            top: 26,
-            right: 15,
+            top: media.getHeight(26),
+            right: media.getWidht(15),
             child: GestureDetector(
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     backgroundColor: Colors.transparent,
-                    title: const Center(
+                    title: Center(
                       child: Text(
                         "Setting",
                         style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
-                          fontSize: 25,
+                          fontSize: media.getWidht(25),
                         ),
                       ),
                     ),
                     content: SizedBox(
-                      height: 200,
-                      width: 280,
+                      height: media.getHeight(200),
+                      width: media.getWidht(280),
                       child: Column(
                         children: [
                           SizedBox(
-                            width: 240,
-                            height: 60,
+                            width: media.getWidht(240),
+                            height: media.getHeight(60),
                             child: TextField(
                               onChanged: (value) {
                                 Provider.of<UserProvider>(context,
@@ -72,25 +77,26 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                     Icons.person,
                                     color: Colors.purple,
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
+                                  focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.deepPurple, width: 3)),
+                                          color: Colors.deepPurple,
+                                          width: media.getWidht(3))),
                                   hintStyle:
                                       const TextStyle(color: Colors.black)),
                             ),
                           ),
-                          const SizedBox(
-                            height: 30,
+                          SizedBox(
+                            height: media.getHeight(30),
                           ),
                           SizedBox(
-                            width: 240,
-                            height: 60,
+                            width: media.getWidht(240),
+                            height: media.getHeight(60),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  height: 100,
-                                  width: 90,
+                                  height: media.getHeight(100),
+                                  width: media.getWidht(90),
                                   color: Colors.white,
                                   child: CustomDropDown(
                                       context
@@ -103,17 +109,17 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                                         .setDefaulftFrom(val);
                                   }),
                                 ),
-                                const SizedBox(
-                                  height: 50,
+                                SizedBox(
+                                  height: media.getHeight(50),
                                   child: Icon(
                                     Icons.swap_horiz,
                                     color: Colors.purple,
-                                    size: 50,
+                                    size: media.getWidht(50),
                                   ),
                                 ),
                                 Container(
-                                  height: 100,
-                                  width: 90,
+                                  height: media.getHeight(100),
+                                  width: media.getWidht(90),
                                   color: Colors.white,
                                   child: CustomDropDown(
                                       context
@@ -135,31 +141,31 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                   ),
                 );
               },
-              child: const Icon(
+              child: Icon(
                 Icons.settings,
-                size: 50,
+                size: media.getWidht(50),
               ),
             ),
           ),
           Positioned(
-            top: 30,
-            right: 85,
+            top: media.getHeight(30),
+            right: media.getWidht(85),
             child: GestureDetector(
               onTap: () {},
-              child: const Icon(
+              child: Icon(
                 FontAwesomeIcons.database,
-                size: 43,
+                size: media.getWidht(43),
               ),
             ),
           ),
           Positioned(
-            top: 150,
-            bottom: 15,
+            top: media.getHeight(150),
+            bottom: media.getHeight(15),
             left: 0,
             right: 0,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(media.getWidht(8)),
                 child: Column(
                     children: context
                         .watch<ArchiveProvier>()

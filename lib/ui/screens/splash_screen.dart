@@ -18,6 +18,7 @@ class SplachScreen extends StatefulWidget {
 
 class _SplachScreenState extends State<SplachScreen> {
   ApiClient client = ApiClient();
+  String error = "";
   @override
   void initState() {
     super.initState();
@@ -25,22 +26,65 @@ class _SplachScreenState extends State<SplachScreen> {
   }
 
   void getCurrencies() async {
-    await Provider.of<CurrencyProvider>(context, listen: false)
-        .fetchCurrencies();
-    await Provider.of<ArchiveProvier>(context, listen: false).loadList();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if ((prefs.getString("username") != null) &&
-        (prefs.getString("defaultFrom") != null) &&
-        (prefs.getString("defaultTo") != null)) {
-      await Provider.of<UserProvider>(context, listen: false).getStorageData();
+    try {
+      await Provider.of<CurrencyProvider>(context, listen: false)
+          .fetchCurrencies();
+      await Provider.of<ArchiveProvier>(context, listen: false).loadList();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if ((prefs.getString("username") != null) &&
+          (prefs.getString("defaultFrom") != null) &&
+          (prefs.getString("defaultTo") != null)) {
+        await Provider.of<UserProvider>(context, listen: false)
+            .getStorageData();
 
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false);
-    } else {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const InitialScreen()));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (route) => false);
+      } else {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const InitialScreen()));
+      }
+    } catch (e) {
+      if (e.toString() ==
+          "Exception: Error occured while fetching api , please try again later") {
+        setState(() {
+          error = "Error occured while fetching api , please try again later";
+        });
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: const Center(
+              child: Text(
+                "Opppsss",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+              ),
+            ),
+            content: SizedBox(
+              height: 140,
+              width: 200,
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.dangerous,
+                    color: Colors.red,
+                    size: 40,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    error,
+                    style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.black38,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            )),
+      );
     }
   }
 

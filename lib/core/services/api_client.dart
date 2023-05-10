@@ -14,7 +14,8 @@ class ApiClient {
       List<String> currencies = (list.keys).toList();
       return currencies;
     } else {
-      throw Exception("Fialed to Connect to Api");
+      throw Exception(
+          "Error occured while fetching api , please try again later");
     }
   }
 
@@ -28,7 +29,8 @@ class ApiClient {
       double rate = result[to].toDouble();
       return rate;
     } else {
-      throw Exception("Failed to connect to API");
+      throw Exception(
+          "Error occured while fetching api , please try again later");
     }
   }
 }

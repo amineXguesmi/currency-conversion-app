@@ -7,8 +7,13 @@ class CurrencyProvider extends ChangeNotifier {
   ApiClient client = ApiClient();
 
   Future<bool> fetchCurrencies() async {
-    currencies = await client.getCurrencies();
-    notifyListeners();
-    return true;
+    try {
+      currencies = await client.getCurrencies();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      throw Exception(
+          "Error occured while fetching api , please try again later");
+    }
   }
 }

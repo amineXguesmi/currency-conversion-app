@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String output = "0";
   String input = "0";
   bool animate = false;
+  String error = "";
   ApiClient client = ApiClient();
   final TextEditingController inputController =
       TextEditingController(text: null);
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       animate = false;
@@ -50,24 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void convertInputToOutput(from, to) async {
-    double rate = await client.getRate(from, to);
-    double inputValue = double.tryParse(inputController.text) ?? 0;
-    input = inputController.text;
-    double outputValue = rate * inputValue;
-    setState(() {
-      output = outputValue.toString();
-      outputController.text = output;
-    });
-  }
-
-  void convertOutputToInput(from, to) async {
-    double rate = await client.getRate(to, from);
-    double outputValue = double.tryParse(outputController.text) ?? 0;
-    double inputValue = rate * outputValue;
-    setState(() {
-      input = inputValue.toString();
-      inputController.text = input;
-    });
+    try {
+      double rate = await client.getRate(from, to);
+      double inputValue = double.tryParse(inputController.text) ?? 0;
+      input = inputController.text;
+      double outputValue = rate * inputValue;
+      setState(() {
+        output = outputValue.toString();
+        outputController.text = output;
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
@@ -91,16 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: media.getHeight(50),
                 width: media.getWidht(50),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: [0, 0.7, 1],
-                    colors: [
-                      Color(0xFF49125c),
-                      Color(0xFf3b246a),
-                      Color(0xFF926b9f),
-                    ],
-                  ),
+                  color: const Color.fromRGBO(70, 106, 148, 1),
                   borderRadius: BorderRadius.circular(media.getWidht(10)),
                 ),
                 child: Center(
@@ -121,11 +106,54 @@ class _HomeScreenState extends State<HomeScreen> {
             right: media.getWidht(190),
             child: GestureDetector(
               onTap: () {
-                FocusScope.of(context).unfocus();
-                Provider.of<UserProvider>(context, listen: false)
-                    .swipeDefault();
-                convertInputToOutput(context.read<UserProvider>().defaultFrom,
-                    context.read<UserProvider>().defaultTo);
+                try {
+                  FocusScope.of(context).unfocus();
+                  Provider.of<UserProvider>(context, listen: false)
+                      .swipeDefault();
+                  convertInputToOutput(context.read<UserProvider>().defaultFrom,
+                      context.read<UserProvider>().defaultTo);
+                } catch (e) {
+                  if (e.toString() ==
+                      "Exception: Error occurred while fetching api , please try again later") {
+                    setState(() {
+                      error =
+                          "Error occurred while fetching api , please try again later";
+                    });
+                  }
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                          title: const Center(
+                            child: Text(
+                              "Oppsss",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 40),
+                            ),
+                          ),
+                          content: SizedBox(
+                            height: 140,
+                            width: 200,
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.dangerous,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  error,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.black38,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          )));
+                }
               },
               child: Padding(
                 padding: EdgeInsets.all(media.getWidht(10)),
@@ -147,16 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: media.getHeight(50),
                 width: media.getWidht(50),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: [0, 0.7, 1],
-                    colors: [
-                      Color(0xFF49125c),
-                      Color(0xFf3b246a),
-                      Color(0xFF926b9f),
-                    ],
-                  ),
+                  color: const Color.fromRGBO(70, 106, 148, 1),
                   borderRadius: BorderRadius.circular(media.getWidht(10)),
                 ),
                 child: Center(
@@ -193,8 +212,52 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintStyle: const TextStyle(color: Colors.black),
                 ),
                 onChanged: (value) {
-                  convertInputToOutput(context.read<UserProvider>().defaultFrom,
-                      context.read<UserProvider>().defaultTo);
+                  try {
+                    convertInputToOutput(
+                        context.read<UserProvider>().defaultFrom,
+                        context.read<UserProvider>().defaultTo);
+                  } catch (e) {
+                    if (e.toString() ==
+                        "Exception: Error occurred while fetching api , please try again later") {
+                      setState(() {
+                        error =
+                            "Error occurred while fetching api , please try again later";
+                      });
+                    }
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                            title: const Center(
+                              child: Text(
+                                "Opppsss",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 40),
+                              ),
+                            ),
+                            content: SizedBox(
+                              height: 140,
+                              width: 200,
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.dangerous,
+                                    color: Colors.red,
+                                    size: 40,
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    error,
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.black38,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            )));
+                  }
                 },
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^(\d+\.?\d*)?')),
@@ -204,30 +267,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             top: media.getHeight(420),
-            left: media.getWidht(20),
-            right: media.getWidht(20),
+            left: media.getWidht(50),
+            right: media.getWidht(50),
             child: Padding(
               padding: EdgeInsets.all(media.getWidht(20)),
               child: TextField(
+                textAlign: TextAlign.center,
                 controller: outputController,
                 enabled: false,
-                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromRGBO(70, 106, 148, 1),
                   border: const OutlineInputBorder(),
                   hintText: "Output Amount",
-                  prefixIcon: const Icon(
-                    Icons.numbers,
-                    color: Colors.purple,
-                  ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.deepPurple, width: media.getWidht(3))),
                   hintStyle: const TextStyle(color: Colors.black),
                 ),
-                onChanged: (value) {
-                  convertOutputToInput(context.read<UserProvider>().defaultFrom,
-                      context.read<UserProvider>().defaultTo);
-                },
               ),
             ),
           ),
@@ -262,17 +319,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   Provider.of<ArchiveProvier>(context, listen: false)
                       .addConversion(conversion);
                   showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      content: Text(
-                        "ADDED SUCCFFELLY",
-                        style: TextStyle(
-                            fontSize: media.getWidht(25),
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
+                      context: context,
+                      builder: (context) => AlertDialog(
+                          title: const Center(
+                            child: Text(
+                              "Success",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 40,
+                                  color: Colors.green),
+                            ),
+                          ),
+                          content: SizedBox(
+                            height: 180,
+                            width: 200,
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 40,
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const Text(
+                                  "Your Conversion Added Successfully to your archive ,feel free to check it ",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.black38,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          )));
                 },
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 600),

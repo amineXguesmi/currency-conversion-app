@@ -1,15 +1,12 @@
 import 'package:currency_conversion/core/models/conversion.dart';
 import 'package:currency_conversion/core/providers/archive_provider.dart';
-import 'package:currency_conversion/ui/screens/archive_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/providers/currency_provider.dart';
 import '../../core/providers/user_provider.dart';
 import '../../core/services/api_client.dart';
 import '../utilities/media_query.dart';
-import '../widgets/custom_dropdown.dart';
+import '../widgets/navbar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -23,9 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String input = "0";
   ApiClient client = ApiClient();
   final TextEditingController inputController =
-      TextEditingController(text: "0");
+      TextEditingController(text: null);
   final TextEditingController outputController =
-      TextEditingController(text: "0");
+      TextEditingController(text: null);
 
   @override
   void dispose() {
@@ -37,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void convertInputToOutput(from, to) async {
     double rate = await client.getRate(from, to);
     double inputValue = double.tryParse(inputController.text) ?? 0;
+    input = inputController.text;
     double outputValue = rate * inputValue;
     setState(() {
       output = outputValue.toString();
@@ -64,146 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned(
-            top: media.getHeight(10),
-            child: Image(
-              width: media.getWidht(110),
-              image: AssetImage('assets/logo.png'),
-            ),
-          ),
-          Positioned(
-            top: media.getHeight(26),
-            right: media.getWidht(15),
-            child: GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    backgroundColor: Colors.transparent,
-                    title: Center(
-                      child: Text(
-                        "Setting",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: media.getWidht(25),
-                        ),
-                      ),
-                    ),
-                    content: SizedBox(
-                      height: media.getHeight(200),
-                      width: media.getWidht(280),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: media.getWidht(240),
-                            height: media.getHeight(60),
-                            child: TextField(
-                              onChanged: (value) {
-                                Provider.of<UserProvider>(context,
-                                        listen: false)
-                                    .setUsername(value);
-                              },
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: const OutlineInputBorder(),
-                                  hintText:
-                                      context.read<UserProvider>().userName,
-                                  prefixIcon: const Icon(
-                                    Icons.person,
-                                    color: Colors.purple,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.deepPurple,
-                                          width: media.getWidht(3))),
-                                  hintStyle:
-                                      const TextStyle(color: Colors.black)),
-                            ),
-                          ),
-                          SizedBox(
-                            height: media.getHeight(30),
-                          ),
-                          SizedBox(
-                            width: media.getWidht(240),
-                            height: media.getHeight(60),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: media.getHeight(100),
-                                  width: media.getWidht(90),
-                                  color: Colors.white,
-                                  child: CustomDropDown(
-                                      context
-                                          .read<CurrencyProvider>()
-                                          .currencies,
-                                      context.read<UserProvider>().defaultFrom,
-                                      (val) {
-                                    Provider.of<UserProvider>(context,
-                                            listen: false)
-                                        .setDefaulftFrom(val);
-                                  }),
-                                ),
-                                SizedBox(
-                                  height: media.getHeight(50),
-                                  child: Icon(
-                                    Icons.swap_horiz,
-                                    color: Colors.purple,
-                                    size: media.getWidht(50),
-                                  ),
-                                ),
-                                Container(
-                                  height: media.getHeight(100),
-                                  width: media.getWidht(90),
-                                  color: Colors.white,
-                                  child: CustomDropDown(
-                                      context
-                                          .read<CurrencyProvider>()
-                                          .currencies,
-                                      context.read<UserProvider>().defaultTo,
-                                      (val) {
-                                    Provider.of<UserProvider>(context,
-                                            listen: false)
-                                        .setDefaultTo(val);
-                                  }),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.settings,
-                size: media.getWidht(50),
-              ),
-            ),
-          ),
-          Positioned(
-            top: media.getHeight(30),
-            right: media.getWidht(85),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ArchiveScreen()));
-              },
-              child: Icon(
-                FontAwesomeIcons.database,
-                size: media.getWidht(43),
-              ),
-            ),
-          ),
+          NavBar(),
           Positioned(
             top: media.getHeight(200),
             left: media.getWidht(20),
-            right: media.getWidht(200),
+            right: media.getWidht(210),
             child: Padding(
               padding: EdgeInsets.all(media.getWidht(20)),
               child: Container(
@@ -235,29 +98,29 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-            top: media.getHeight(210),
-            left: media.getWidht(159),
+            top: media.getHeight(195),
+            left: media.getWidht(147),
             right: media.getWidht(190),
-            child: Padding(
-              padding: EdgeInsets.all(media.getWidht(10.0)),
-              child: GestureDetector(
-                onTap: () {
-                  Provider.of<UserProvider>(context, listen: false)
-                      .swipeDefault();
-                  convertInputToOutput(context.read<UserProvider>().defaultFrom,
-                      context.read<UserProvider>().defaultTo);
-                },
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<UserProvider>(context, listen: false)
+                    .swipeDefault();
+                convertInputToOutput(context.read<UserProvider>().defaultFrom,
+                    context.read<UserProvider>().defaultTo);
+              },
+              child: Padding(
+                padding: EdgeInsets.all(media.getWidht(10)),
                 child: Icon(
                   Icons.swap_horiz,
                   color: Colors.deepPurple,
-                  size: media.getWidht(55),
+                  size: media.getWidht(80),
                 ),
               ),
             ),
           ),
           Positioned(
             top: media.getHeight(200),
-            left: media.getWidht(200),
+            left: media.getWidht(210),
             right: media.getWidht(20),
             child: Padding(
               padding: EdgeInsets.all(media.getWidht(20)),
@@ -325,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.all(media.getWidht(20)),
               child: TextField(
                 controller: outputController,
+                enabled: false,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -372,6 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       time: time,
                       conversionFrom: conversionFrom,
                       conversionTo: conversionTo);
+                  print(conversion.conversionFrom);
                   Provider.of<ArchiveProvier>(context, listen: false)
                       .AddConversion(conversion);
                 },

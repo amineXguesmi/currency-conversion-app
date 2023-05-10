@@ -119,9 +119,9 @@ class ArchiveCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(media.getWidht(10)),
               boxShadow: [
                 BoxShadow(
-                  color: Color.fromRGBO(256, 256, 256, 0.5),
+                  color: const Color.fromRGBO(256, 256, 256, 0.5),
                   blurRadius: media.getWidht(20),
-                  offset: Offset(0, 10),
+                  offset: const Offset(0, 10),
                 )
               ]),
           child: Row(

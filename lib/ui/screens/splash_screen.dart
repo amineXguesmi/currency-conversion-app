@@ -1,3 +1,4 @@
+import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/initial_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,13 @@ class _SplachScreenState extends State<SplachScreen> {
   void getCurrencies() async {
     await Provider.of<CurrencyProvider>(context, listen: false)
         .fetchCurrencies();
+    await Provider.of<ArchiveProvier>(context, listen: false).loadList();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if ((prefs.getString("username") != null) &&
         (prefs.getString("defaultFrom") != null) &&
         (prefs.getString("defaultTo") != null)) {
       await Provider.of<UserProvider>(context, listen: false).getStorageData();
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -61,6 +64,7 @@ class _SplachScreenState extends State<SplachScreen> {
       ),
       child: const Center(
         child: Image(
+          fit: BoxFit.contain,
           image: AssetImage('assets/splach_image.png'),
         ),
       ),

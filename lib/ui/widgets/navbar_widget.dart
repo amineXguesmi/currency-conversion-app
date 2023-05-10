@@ -30,8 +30,11 @@ class _NavBarState extends State<NavBar> {
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                (route) => false,
+              );
             },
             child: Image(
               width: media.getWidht(120),
@@ -161,10 +164,11 @@ class _NavBarState extends State<NavBar> {
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ArchiveScreen()));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const ArchiveScreen()),
+                (route) => false,
+              );
             },
             child: Icon(
               FontAwesomeIcons.database,

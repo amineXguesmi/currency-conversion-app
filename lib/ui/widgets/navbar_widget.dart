@@ -59,83 +59,91 @@ class _NavBarState extends State<NavBar> {
                       ),
                     ),
                   ),
-                  content: SizedBox(
-                    height: media.getHeight(200),
-                    width: media.getWidht(280),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: media.getWidht(240),
-                          height: media.getHeight(60),
-                          child: TextField(
-                            onChanged: (value) {
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .setUsername(value);
-                            },
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: const OutlineInputBorder(),
-                                hintText: context.read<UserProvider>().userName,
-                                prefixIcon: const Icon(
-                                  Icons.person,
-                                  color: Colors.purple,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.deepPurple,
-                                        width: media.getWidht(3))),
-                                hintStyle:
-                                    const TextStyle(color: Colors.black)),
+                  content: SingleChildScrollView(
+                    child: SizedBox(
+                      height: media.getHeight(200),
+                      width: media.getWidht(280),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: media.getWidht(240),
+                            height: media.getHeight(60),
+                            child: TextField(
+                              onChanged: (value) {
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .setUsername(value);
+                              },
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: const OutlineInputBorder(),
+                                  hintText:
+                                      context.read<UserProvider>().userName,
+                                  prefixIcon: const Icon(
+                                    Icons.person,
+                                    color: Colors.purple,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.deepPurple,
+                                          width: media.getWidht(3))),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black)),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: media.getHeight(30),
-                        ),
-                        SizedBox(
-                          width: media.getWidht(240),
-                          height: media.getHeight(60),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: media.getHeight(100),
-                                width: media.getWidht(90),
-                                color: Colors.white,
-                                child: CustomDropDown(
-                                    context.read<CurrencyProvider>().currencies,
-                                    context.read<UserProvider>().defaultFrom,
-                                    (val) {
-                                  Provider.of<UserProvider>(context,
-                                          listen: false)
-                                      .setDefaulftFrom(val);
-                                }),
-                              ),
-                              SizedBox(
-                                height: media.getHeight(50),
-                                child: Icon(
-                                  Icons.swap_horiz,
-                                  color: Colors.purple,
-                                  size: media.getWidht(50),
-                                ),
-                              ),
-                              Container(
-                                height: media.getHeight(100),
-                                width: media.getWidht(90),
-                                color: Colors.white,
-                                child: CustomDropDown(
-                                    context.read<CurrencyProvider>().currencies,
-                                    context.read<UserProvider>().defaultTo,
-                                    (val) {
-                                  Provider.of<UserProvider>(context,
-                                          listen: false)
-                                      .setDefaultTo(val);
-                                }),
-                              ),
-                            ],
+                          SizedBox(
+                            height: media.getHeight(30),
                           ),
-                        )
-                      ],
+                          SizedBox(
+                            width: media.getWidht(240),
+                            height: media.getHeight(60),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: media.getHeight(100),
+                                  width: media.getWidht(90),
+                                  color: Colors.white,
+                                  child: CustomDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultFrom,
+                                      (val) {
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
+                                        .setDefaulftFrom(val);
+                                  }),
+                                ),
+                                SizedBox(
+                                  height: media.getHeight(50),
+                                  child: Icon(
+                                    Icons.swap_horiz,
+                                    color: Colors.purple,
+                                    size: media.getWidht(50),
+                                  ),
+                                ),
+                                Container(
+                                  height: media.getHeight(100),
+                                  width: media.getWidht(90),
+                                  color: Colors.white,
+                                  child: CustomDropDown(
+                                      context
+                                          .read<CurrencyProvider>()
+                                          .currencies,
+                                      context.read<UserProvider>().defaultTo,
+                                      (val) {
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
+                                        .setDefaultTo(val);
+                                  }),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

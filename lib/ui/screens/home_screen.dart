@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:currency_conversion/core/models/conversion.dart';
 import 'package:currency_conversion/core/providers/archive_provider.dart';
+import 'package:currency_conversion/core/providers/rate_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void convertInputToOutput(from, to) async {
     try {
-      double rate = await client.getRate(from, to);
+      double rate = context.read<RateProvider>().rate;
       double inputValue = double.tryParse(inputController.text) ?? 0;
       input = inputController.text;
       double outputValue = rate * inputValue;
@@ -114,6 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     FocusScope.of(context).unfocus();
                     Provider.of<UserProvider>(context, listen: false)
                         .swipeDefault();
+                    Provider.of<RateProvider>(context, listen: false).fetchRate(
+                        context.read<UserProvider>().defaultFrom,
+                        context.read<UserProvider>().defaultTo);
                     convertInputToOutput(
                         context.read<UserProvider>().defaultFrom,
                         context.read<UserProvider>().defaultTo);

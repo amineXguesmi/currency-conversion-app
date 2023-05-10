@@ -1,3 +1,4 @@
+import 'package:currency_conversion/core/providers/rate_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,6 +6,7 @@ class UserProvider extends ChangeNotifier {
   String userName = "";
   String defaultFrom = "";
   String defaultTo = "";
+  RateProvider rateProvider = RateProvider();
 
   void changeSettings(String userName, String defaultFrom, String defaultTo) {
     this.userName = userName;

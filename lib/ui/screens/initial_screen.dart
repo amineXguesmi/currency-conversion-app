@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:currency_conversion/core/providers/currency_provider.dart';
+import 'package:currency_conversion/core/providers/rate_provider.dart';
 import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/home_screen.dart';
 import 'package:currency_conversion/ui/widgets/custom_dropdown.dart';
@@ -154,6 +155,8 @@ class _InitialScreenState extends State<InitialScreen> {
                       prefs.setString("username", userName);
                       prefs.setString("defaultFrom", from);
                       prefs.setString("defaultTo", to);
+                      Provider.of<RateProvider>(context, listen: false)
+                          .fetchRate(from, to);
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

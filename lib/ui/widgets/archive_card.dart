@@ -177,7 +177,7 @@ class ArchiveCard extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Provider.of<ArchiveProvier>(context, listen: false)
+                    Provider.of<ArchiveProvider>(context, listen: false)
                         .deleteConversion(time);
                   },
                   child: const Icon(

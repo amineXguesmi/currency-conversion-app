@@ -29,7 +29,7 @@ class _SplachScreenState extends State<SplachScreen> {
     try {
       await Provider.of<CurrencyProvider>(context, listen: false)
           .fetchCurrencies();
-      await Provider.of<ArchiveProvier>(context, listen: false).loadList();
+      await Provider.of<ArchiveProvider>(context, listen: false).loadList();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if ((prefs.getString("username") != null) &&
           (prefs.getString("defaultFrom") != null) &&
@@ -90,28 +90,33 @@ class _SplachScreenState extends State<SplachScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          stops: [0, 0.7, 1],
-          colors: [
-            Color(0xFF49125c),
-            Color(0xFf3b246a),
-            Color(0xFF926b9f),
-          ],
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+          body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: [0, 0.7, 1],
+            colors: [
+              Color(0xFF49125c),
+              Color(0xFf3b246a),
+              Color(0xFF926b9f),
+            ],
+          ),
         ),
-      ),
-      child: const Center(
-        child: Image(
-          fit: BoxFit.contain,
-          image: AssetImage('assets/splach_image.png'),
+        child: const Center(
+          child: Image(
+            fit: BoxFit.contain,
+            image: AssetImage('assets/splach_image.png'),
+          ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

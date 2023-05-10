@@ -20,34 +20,39 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     double deviceWidth = MediaQuery.of(context).size.width;
     Mediaquery media =
         Mediaquery(mediaHeight: deviceHeight, mediaWidth: deviceWidth);
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          const NavBar(),
-          Positioned(
-            top: media.getHeight(150),
-            bottom: media.getHeight(15),
-            left: 0,
-            right: 0,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(media.getWidht(8)),
-                child: Column(
-                    children: context
-                        .watch<ArchiveProvier>()
-                        .conversionList
-                        .map((e) => ArchiveCard(
-                              date: e.date,
-                              time: e.time,
-                              conversionFrom: e.conversionFrom,
-                              conversionTo: e.conversionTo,
-                            ))
-                        .toList()),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            const NavBar(),
+            Positioned(
+              top: media.getHeight(150),
+              bottom: media.getHeight(15),
+              left: 0,
+              right: 0,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(media.getWidht(8)),
+                  child: Column(
+                      children: context
+                          .watch<ArchiveProvider>()
+                          .conversionList
+                          .map((e) => ArchiveCard(
+                                date: e.date,
+                                time: e.time,
+                                conversionFrom: e.conversionFrom,
+                                conversionTo: e.conversionTo,
+                              ))
+                          .toList()),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

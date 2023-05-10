@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/conversion.dart';
 
-class ArchiveProvier extends ChangeNotifier {
+class ArchiveProvider extends ChangeNotifier {
   List<Conversion> conversionList = [];
 
   Future<bool> loadList() async {

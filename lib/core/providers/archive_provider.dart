@@ -16,13 +16,12 @@ class ArchiveProvier extends ChangeNotifier {
       for (var conversion in conversionL) {
         conversionList.add(Conversion.fromJson(conversion));
       }
-      ;
     }
     notifyListeners();
     return true;
   }
 
-  Future<bool> AddConversion(Conversion conversion) async {
+  Future<bool> addConversion(Conversion conversion) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     conversionList.add(conversion);
     List archive = conversionList.map((e) => e.toJson()).toList();

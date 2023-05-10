@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:currency_conversion/core/providers/currency_provider.dart';
 import 'package:currency_conversion/core/providers/user_provider.dart';
 import 'package:currency_conversion/ui/screens/home_screen.dart';
@@ -19,6 +21,20 @@ class _InitialScreenState extends State<InitialScreen> {
   String from = "USD";
   String to = "USD";
   String userName = "";
+  bool animate = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      animate = false;
+    });
+    Timer(
+        const Duration(milliseconds: 600),
+        () => setState(() {
+              animate = true;
+            }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +52,7 @@ class _InitialScreenState extends State<InitialScreen> {
               child: Image(
                 height: media.getHeight(400),
                 width: media.getWidht(420),
-                image: AssetImage('assets/logo.png'),
+                image: const AssetImage('assets/logo.png'),
               ),
             ),
           ),
@@ -47,6 +63,7 @@ class _InitialScreenState extends State<InitialScreen> {
             child: Padding(
               padding: EdgeInsets.all(media.getWidht(20.0)),
               child: TextField(
+                keyboardType: TextInputType.text,
                 onChanged: (value) {
                   setState(() {
                     userName = value;
@@ -124,38 +141,61 @@ class _InitialScreenState extends State<InitialScreen> {
               padding: EdgeInsets.all(media.getWidht(20.0)),
               child: GestureDetector(
                 onTap: () async {
-                  Provider.of<UserProvider>(context, listen: false)
-                      .changeSettings(userName, from, to);
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.setString("username", userName);
-                  prefs.setString("defaultFrom", from);
-                  prefs.setString("defaultTo", to);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (route) => false);
+                  if (userName != "") {
+                    FocusScope.of(context).unfocus();
+                    Provider.of<UserProvider>(context, listen: false)
+                        .changeSettings(userName, from, to);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString("username", userName);
+                    prefs.setString("defaultFrom", from);
+                    prefs.setString("defaultTo", to);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
+                        (route) => false);
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text(
+                          "UserName is empty",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                            fontSize: media.getWidht(22),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 },
-                child: Container(
-                  height: media.getHeight(70),
-                  width: media.getWidht(50),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(media.getWidht(10)),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromRGBO(143, 148, 251, 1),
-                        Color.fromRGBO(143, 148, 251, 0.9),
-                        Color.fromRGBO(143, 148, 251, 0.2),
-                      ],
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 800),
+                  opacity: animate ? 1 : 0,
+                  curve: Curves.easeOutSine,
+                  child: Container(
+                    height: media.getHeight(70),
+                    width: media.getWidht(50),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(media.getWidht(10)),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromRGBO(143, 148, 251, 1),
+                          Color.fromRGBO(143, 148, 251, 0.9),
+                          Color.fromRGBO(143, 148, 251, 0.2),
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Start",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: media.getWidht(19)),
+                    child: Center(
+                      child: Text(
+                        "Start",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: media.getWidht(19)),
+                      ),
                     ),
                   ),
                 ),

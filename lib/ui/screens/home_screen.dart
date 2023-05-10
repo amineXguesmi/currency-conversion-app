@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:currency_conversion/core/models/conversion.dart';
 import 'package:currency_conversion/core/providers/archive_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/providers/user_provider.dart';
@@ -9,7 +12,7 @@ import '../utilities/media_query.dart';
 import '../widgets/navbar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -18,11 +21,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String output = "0";
   String input = "0";
+  bool animate = false;
   ApiClient client = ApiClient();
   final TextEditingController inputController =
       TextEditingController(text: null);
   final TextEditingController outputController =
       TextEditingController(text: null);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      animate = false;
+    });
+    Timer(
+        const Duration(milliseconds: 600),
+        () => setState(() {
+              animate = true;
+            }));
+  }
 
   @override
   void dispose() {
@@ -62,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          NavBar(),
+          const NavBar(),
           Positioned(
             top: media.getHeight(200),
             left: media.getWidht(20),
@@ -73,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: media.getHeight(50),
                 width: media.getWidht(50),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     stops: [0, 0.7, 1],
@@ -103,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
             right: media.getWidht(190),
             child: GestureDetector(
               onTap: () {
+                FocusScope.of(context).unfocus();
                 Provider.of<UserProvider>(context, listen: false)
                     .swipeDefault();
                 convertInputToOutput(context.read<UserProvider>().defaultFrom,
@@ -128,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: media.getHeight(50),
                 width: media.getWidht(50),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     stops: [0, 0.7, 1],
@@ -162,9 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller: inputController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   hintText: "Input Amount",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.numbers,
                     color: Colors.purple,
                   ),
@@ -177,6 +196,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   convertInputToOutput(context.read<UserProvider>().defaultFrom,
                       context.read<UserProvider>().defaultTo);
                 },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^(\d+\.?\d*)?')),
+                ],
               ),
             ),
           ),
@@ -191,16 +213,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 enabled: false,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   hintText: "Output Amount",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.numbers,
                     color: Colors.purple,
                   ),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.deepPurple, width: media.getWidht(3))),
-                  hintStyle: TextStyle(color: Colors.black),
+                  hintStyle: const TextStyle(color: Colors.black),
                 ),
                 onChanged: (value) {
                   convertOutputToInput(context.read<UserProvider>().defaultFrom,
@@ -218,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: media.getWidht(10), right: media.getWidht(10)),
               child: GestureDetector(
                 onTap: () {
+                  FocusScope.of(context).unfocus();
                   DateTime now = DateTime.now();
                   int year = now.year;
                   int month = now.month;
@@ -236,28 +259,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       time: time,
                       conversionFrom: conversionFrom,
                       conversionTo: conversionTo);
-                  print(conversion.conversionFrom);
                   Provider.of<ArchiveProvier>(context, listen: false)
-                      .AddConversion(conversion);
-                },
-                child: Container(
-                  height: media.getHeight(60),
-                  width: media.getWidht(40),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(media.getWidht(10)),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromRGBO(0, 64, 0, 0.8),
-                        Color.fromRGBO(79, 212, 34, 1),
-                        Color.fromRGBO(0, 64, 0, 0.8),
-                      ],
+                      .addConversion(conversion);
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: Text(
+                        "ADDED SUCCFFELLY",
+                        style: TextStyle(
+                            fontSize: media.getWidht(25),
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.save,
-                      color: Colors.white,
-                      size: media.getWidht(45),
+                  );
+                },
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 600),
+                  opacity: animate ? 1 : 0,
+                  curve: Curves.easeOutSine,
+                  child: Container(
+                    height: media.getHeight(60),
+                    width: media.getWidht(40),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(media.getWidht(10)),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromRGBO(0, 64, 0, 0.8),
+                          Color.fromRGBO(79, 212, 34, 1),
+                          Color.fromRGBO(0, 64, 0, 0.8),
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.save,
+                        color: Colors.white,
+                        size: media.getWidht(45),
+                      ),
                     ),
                   ),
                 ),
@@ -273,30 +312,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: media.getWidht(10), right: media.getWidht(10)),
               child: GestureDetector(
                 onTap: () {
+                  FocusScope.of(context).unfocus();
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                     (route) => false,
                   );
                 },
-                child: Container(
-                  height: media.getHeight(60),
-                  width: media.getWidht(40),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(media.getWidht(10)),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromRGBO(171, 7, 7, 1),
-                        Color.fromRGBO(189, 63, 96, 0.9),
-                        Color.fromRGBO(171, 7, 7, 1),
-                      ],
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 600),
+                  opacity: animate ? 1 : 0,
+                  curve: Curves.easeOutSine,
+                  child: Container(
+                    height: media.getHeight(60),
+                    width: media.getWidht(40),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(media.getWidht(10)),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromRGBO(171, 7, 7, 1),
+                          Color.fromRGBO(189, 63, 96, 0.9),
+                          Color.fromRGBO(171, 7, 7, 1),
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                      size: media.getWidht(45),
+                    child: Center(
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: media.getWidht(45),
+                      ),
                     ),
                   ),
                 ),

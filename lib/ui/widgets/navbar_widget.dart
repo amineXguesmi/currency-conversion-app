@@ -29,12 +29,13 @@ class _NavBarState extends State<NavBar> {
           top: media.getHeight(25),
           child: GestureDetector(
             onTap: () {
+              FocusScope.of(context).unfocus();
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
             },
             child: Image(
               width: media.getWidht(120),
-              image: AssetImage('assets/logo.png'),
+              image: const AssetImage('assets/logo.png'),
             ),
           ),
         ),
@@ -43,6 +44,7 @@ class _NavBarState extends State<NavBar> {
           right: media.getWidht(15),
           child: GestureDetector(
             onTap: () {
+              FocusScope.of(context).unfocus();
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -150,6 +152,7 @@ class _NavBarState extends State<NavBar> {
           right: media.getWidht(85),
           child: GestureDetector(
             onTap: () {
+              FocusScope.of(context).unfocus();
               Navigator.push(
                   context,
                   MaterialPageRoute(

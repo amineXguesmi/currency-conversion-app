@@ -24,7 +24,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          NavBar(),
+          const NavBar(),
           Positioned(
             top: media.getHeight(150),
             bottom: media.getHeight(15),

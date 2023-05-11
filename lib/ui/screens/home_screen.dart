@@ -24,15 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
   String input = "0";
   bool animate = false;
   String error = "";
+  double rate = 0;
   ApiClient client = ApiClient();
   final TextEditingController inputController =
-      TextEditingController(text: null);
-  final TextEditingController outputController =
       TextEditingController(text: null);
 
   @override
   void initState() {
     super.initState();
+    Provider.of<RateProvider>(context, listen: false).fetchRate(
+        context.read<UserProvider>().defaultFrom,
+        context.read<UserProvider>().defaultTo);
     setState(() {
       animate = false;
     });
@@ -46,19 +48,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     inputController.dispose();
-    outputController.dispose();
     super.dispose();
   }
 
   void convertInputToOutput(from, to) async {
     try {
-      double rate = context.read<RateProvider>().rate;
+      setState(() {
+        rate = context.read<RateProvider>().rate;
+      });
       double inputValue = double.tryParse(inputController.text) ?? 0;
-      input = inputController.text;
+
       double outputValue = rate * inputValue;
       setState(() {
+        input = inputController.text;
         output = outputValue.toString();
-        outputController.text = output;
       });
     } catch (e) {
       rethrow;
@@ -79,7 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            const NavBar(),
+            NavBar(changeOutput: () {
+              setState(() {
+                inputController.text = "";
+                output = "0";
+              });
+            }),
             Positioned(
               top: media.getHeight(200),
               left: media.getWidht(20),
@@ -106,18 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Positioned(
-              top: media.getHeight(195),
-              left: media.getWidht(147),
+              top: media.getHeight(203),
+              left: media.getWidht(157),
               right: media.getWidht(190),
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   try {
                     FocusScope.of(context).unfocus();
                     Provider.of<UserProvider>(context, listen: false)
                         .swipeDefault();
-                    Provider.of<RateProvider>(context, listen: false).fetchRate(
-                        context.read<UserProvider>().defaultFrom,
-                        context.read<UserProvider>().defaultTo);
+
+                    await Provider.of<RateProvider>(context, listen: false)
+                        .fetchRate(context.read<UserProvider>().defaultFrom,
+                            context.read<UserProvider>().defaultTo);
                     convertInputToOutput(
                         context.read<UserProvider>().defaultFrom,
                         context.read<UserProvider>().defaultTo);
@@ -164,13 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             )));
                   }
                 },
-                child: Padding(
-                  padding: EdgeInsets.all(media.getWidht(10)),
-                  child: Icon(
-                    Icons.swap_horiz,
-                    color: Colors.deepPurple,
-                    size: media.getWidht(80),
-                  ),
+                child: Icon(
+                  Icons.swap_horiz,
+                  color: Colors.deepPurple,
+                  size: media.getWidht(80),
                 ),
               ),
             ),
@@ -282,21 +288,22 @@ class _HomeScreenState extends State<HomeScreen> {
               right: media.getWidht(50),
               child: Padding(
                 padding: EdgeInsets.all(media.getWidht(20)),
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  controller: outputController,
-                  enabled: false,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color.fromRGBO(70, 106, 148, 1),
-                    border: const OutlineInputBorder(),
-                    hintText: "Output Amount",
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.deepPurple,
-                            width: media.getWidht(3))),
-                    hintStyle: const TextStyle(color: Colors.black),
+                child: Container(
+                  height: media.getHeight(60),
+                  width: media.getWidht(50),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(70, 106, 148, 1),
+                    borderRadius: BorderRadius.circular(media.getWidht(10)),
                   ),
+                  child: Center(
+                      child: Text(
+                    output,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: media.getWidht(25),
+                      color: Colors.white,
+                    ),
+                  )),
                 ),
               ),
             ),
@@ -346,16 +353,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 180,
                               width: 200,
                               child: Column(
-                                children: [
-                                  const Icon(
+                                children: const [
+                                  Icon(
                                     Icons.check_circle,
                                     color: Colors.green,
                                     size: 40,
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     height: 15,
                                   ),
-                                  const Text(
+                                  Text(
                                     "Your Conversion Added Successfully to your archive ,feel free to check it ",
                                     style: TextStyle(
                                         fontSize: 24,

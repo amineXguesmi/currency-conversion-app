@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget CustomDropDown(List<String> items, String value, void onChange(val)) {
+Widget customDropDown(List<String> items, String value, void onChange(val)) {
   return DropdownButtonFormField<String>(
     menuMaxHeight: 200,
     decoration: const InputDecoration(

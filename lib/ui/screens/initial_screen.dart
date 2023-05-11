@@ -94,7 +94,7 @@ class _InitialScreenState extends State<InitialScreen> {
               right: media.getWidht(210),
               child: Padding(
                 padding: EdgeInsets.all(media.getWidht(20)),
-                child: CustomDropDown(
+                child: customDropDown(
                     context.read<CurrencyProvider>().currencies, from, (val) {
                   setState(() {
                     from = val;
@@ -130,7 +130,7 @@ class _InitialScreenState extends State<InitialScreen> {
               right: media.getWidht(20),
               child: Padding(
                 padding: EdgeInsets.all(media.getWidht(20)),
-                child: CustomDropDown(
+                child: customDropDown(
                     context.read<CurrencyProvider>().currencies, to, (val) {
                   setState(() {
                     to = val;
@@ -155,7 +155,7 @@ class _InitialScreenState extends State<InitialScreen> {
                       prefs.setString("username", userName);
                       prefs.setString("defaultFrom", from);
                       prefs.setString("defaultTo", to);
-                      Provider.of<RateProvider>(context, listen: false)
+                      await Provider.of<RateProvider>(context, listen: false)
                           .fetchRate(from, to);
                       Navigator.pushAndRemoveUntil(
                           context,

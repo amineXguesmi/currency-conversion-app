@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import '../utilities/media_query.dart';
 
 class ArchiveCard extends StatelessWidget {
-  String date;
-  String time;
-  String conversionFrom;
-  String conversionTo;
-  ArchiveCard(
+  final String date;
+  final String time;
+  final String conversionFrom;
+  final String conversionTo;
+  const ArchiveCard(
       {super.key,
       required this.date,
       required this.time,

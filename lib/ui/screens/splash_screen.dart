@@ -39,7 +39,7 @@ class _SplachScreenState extends State<SplachScreen> {
 
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
             (route) => false);
       } else {
         Navigator.push(context,
@@ -71,7 +71,7 @@ class _SplachScreenState extends State<SplachScreen> {
                     color: Colors.red,
                     size: 40,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Text(

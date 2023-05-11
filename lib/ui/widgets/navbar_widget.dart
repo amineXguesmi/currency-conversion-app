@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/providers/currency_provider.dart';
+import '../../core/providers/rate_provider.dart';
 import '../../core/providers/user_provider.dart';
 import '../screens/archive_screen.dart';
 import '../screens/home_screen.dart';
@@ -10,7 +11,8 @@ import '../utilities/media_query.dart';
 import 'custom_dropdown.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({Key? key}) : super(key: key);
+  final Function? changeOutput;
+  const NavBar({Key? key, this.changeOutput}) : super(key: key);
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -108,7 +110,7 @@ class _NavBarState extends State<NavBar> {
                                   height: media.getHeight(100),
                                   width: media.getWidht(90),
                                   color: Colors.white,
-                                  child: CustomDropDown(
+                                  child: customDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,
@@ -131,7 +133,7 @@ class _NavBarState extends State<NavBar> {
                                   height: media.getHeight(100),
                                   width: media.getWidht(90),
                                   color: Colors.white,
-                                  child: CustomDropDown(
+                                  child: customDropDown(
                                       context
                                           .read<CurrencyProvider>()
                                           .currencies,
@@ -150,7 +152,12 @@ class _NavBarState extends State<NavBar> {
                     ),
                   ),
                 ),
-              );
+              ).then((value) => {
+                    Provider.of<RateProvider>(context, listen: false).fetchRate(
+                        context.read<UserProvider>().defaultFrom,
+                        context.read<UserProvider>().defaultTo),
+                    widget.changeOutput?.call(),
+                  });
             },
             child: Icon(
               Icons.settings,

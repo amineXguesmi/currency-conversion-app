@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiClient {
   final Uri currencyUrl = Uri.https("api.fastforex.io", "/currencies",
-      {"api_key": "1bdf149f27-d1d5770bf8-ruduxf"});
+      {"api_key": "ec5bedcaf4-67aa10204e-rugrmg"});
 
   Future<List<String>> getCurrencies() async {
     http.Response res = await http.get(currencyUrl);
@@ -21,7 +21,7 @@ class ApiClient {
 
   Future<double> getRate(String from, String to) async {
     final Uri conversionUrl = Uri.https("api.fastforex.io", "/fetch-one",
-        {"api_key": "1bdf149f27-d1d5770bf8-ruduxf", "from": from, "to": to});
+        {"api_key": "ec5bedcaf4-67aa10204e-rugrmg", "from": from, "to": to});
     http.Response res = await http.get(conversionUrl);
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
